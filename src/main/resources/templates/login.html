@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Registration and Login App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="/css/common.css" rel="stylesheet">
+    <!--<link rel="stylesheet"-->
+    <!--	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
+    <!--	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"-->
+    <!--	crossorigin="anonymous">-->
+
+</head>
+<body>
+
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <h1> Авторизация </h1>
+            <form th:action="@{/login}" method="post">
+
+                <!-- error message -->
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">Неправильное имя пользователя или пароль.</div>
+                </div>
+
+                <!-- logout message -->
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info">Вы успешно вышли из аккаунта.</div>
+                </div>
+
+                <div class="form-group">
+                    <!--						<label for ="username"> Электронная почта </label> :-->
+                    <input type="text" class="form-control" id="username" name="username"
+                           placeholder="Электронная почта" autofocus="autofocus">
+                </div>
+
+                <div class="form-group">
+                    <!--						<label for="password">Пароль</label>: -->
+                    <input type="password" id="password" name="password" class="form-control"
+                           placeholder="Пароль"/>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input type="submit" name="login-submit" id="login-submit"
+                                   class="form-control btn btn-primary" value="Войти"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group">
+                <span>Нет аккаунта? <a href="/" th:href="@{/registration}">Создать аккаунт</a></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

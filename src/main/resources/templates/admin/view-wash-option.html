@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Услуги автомойки</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+
+<br>
+<br>
+<div class="container">
+<div th:switch="${washOptions}">
+
+    <h2 th:case="null">Список услуг пуст</h2>
+    <div th:case="*">
+        <h2>Услуги автомойки</h2>
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th>Наименование</th>
+                <th>Стоимость, руб</th>
+                <th>Затрачиваемое время, мин</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="washOption : ${washOptions}">
+                <td th:text="${washOption.name}"></td>
+                <td th:text="${washOption.cost}"></td>
+                <td th:text="${washOption.time}"></td>
+<!--                <td><a th:href="@{client-update/{id}(id=${client.id})}">Изменить</a></td>-->
+                <td><a th:href="@{admin/delete/{id}(id=${washOption.id})}">Удалить</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        <div class="d-flex p-2 justify-content-center">
+    <a href="/admin/create"><button class="btn btn-lg btn-primary btn-block" type="submit">Добавить услугу</button></a>
+    </div>
+        </div>
+
+</div>
+</body>
+</html>

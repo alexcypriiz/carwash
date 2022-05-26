@@ -39,7 +39,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .formLogin()
                     .loginPage("/login")
                 //Перенарпавление на главную страницу после успешного входа
-                    .defaultSuccessUrl("/main", true)
+                    .defaultSuccessUrl("/carwash", true)
                     .permitAll()
                 .and()
                     .logout()

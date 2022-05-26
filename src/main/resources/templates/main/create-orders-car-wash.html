@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Выбор услуги</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="d-flex p-2 justify-content-start">
+    <a href="/carwash"><button class="btn btn-sm btn-primary btn-block" type="submit">Список забронированных записей</button></a>
+</div>
+<br>
+<br>
+<form method="POST" class="ui form" th:object="${order}" th:action="@{/carwash/create}">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                        <h2>Услуги автомойки</h2>
+                <div th:if="${orderError}">
+                    <div class="alert alert-danger" th:text="${orderError}"></div>
+                </div>
+                <div th:if="${doubleOrderError}">
+                    <div class="alert alert-danger" th:text="${doubleOrderError}"></div>
+                </div>
+                <div th:switch="${washOptions}">
+                    <div th:case="*">
+                        <table class="table">
+                            <thead class="thead-light">
+                            <tr>
+                                <th></th>
+                                <th>Наименование</th>
+                                <th>Стоимость</th>
+                                <th>Затрачиваемое время</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="washOption : ${selectedWashOptions}">
+                                <div class="ui checkbox">
+                                    <td><input type="checkbox" th:field="*{washOptions}" th:value="${washOption.id}">
+                                    </td>
+                                    <td th:text="${washOption.name}"></td>
+                                    <td th:text="${washOption.cost} + ' руб'"></td>
+                                    <td th:text="${washOption.time} + ' мин'"></td>
+                                </div>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <br>
+                        Выберите дату и время записи: <input type="datetime-local" th:field="${order.startTime}"/>
+                    </div>
+                    <br>
+
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Добавить</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+</body>
+</html>

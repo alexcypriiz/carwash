@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org">
@@ -8,7 +7,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
+
 <body>
+<div class="d-flex p-2 justify-content-between">
+    <a href="/carwash"><button class="btn btn-sm btn-primary btn-block" type="submit">Список забронированных записей</button></a>
+    <a href="/logout"><button class="btn btn-sm btn-primary btn-block" type="submit">Выйти из учетной записи</button></a>
+</div>
 
 <br>
 <br>
@@ -22,8 +26,8 @@
             <thead class="thead-light">
             <tr>
                 <th>Наименование</th>
-                <th>Стоимость, руб</th>
-                <th>Затрачиваемое время, мин</th>
+                <th>Стоимость</th>
+                <th>Затрачиваемое время</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -31,9 +35,9 @@
             <tbody>
             <tr th:each="washOption : ${washOptions}">
                 <td th:text="${washOption.name}"></td>
-                <td th:text="${washOption.cost}"></td>
-                <td th:text="${washOption.time}"></td>
-<!--                <td><a th:href="@{client-update/{id}(id=${client.id})}">Изменить</a></td>-->
+                <td th:text="${washOption.cost} + ' руб'"></td>
+                <td th:text="${washOption.time} + ' мин'"></td>
+                <td><a th:href="@{admin/update/{id}(id=${washOption.id})}">Изменить</a></td>
                 <td><a th:href="@{admin/delete/{id}(id=${washOption.id})}">Удалить</a></td>
             </tr>
             </tbody>
@@ -43,7 +47,6 @@
     <a href="/admin/create"><button class="btn btn-lg btn-primary btn-block" type="submit">Добавить услугу</button></a>
     </div>
         </div>
-
 </div>
 </body>
 </html>

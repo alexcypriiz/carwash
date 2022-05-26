@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Забронированные места</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+
+<body>
+
+<div class="d-flex p-2 justify-content-end">
+    <a href="/logout">
+        <button class="btn btn-sm btn-primary btn-block" type="submit">Выйти из учетной записи</button>
+    </a>
+</div>
+<br>
+<br>
+<div class="container">
+    <div th:switch="${orders}">
+
+        <div th:case="*">
+            <h2>Забронированные места</h2>
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>Время</th>
+                    <th>Машина</th>
+                    <th>Имя владельца</th>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <th>Сумма к оплате</th>
+                    </div>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${#temporals.format(order.startTime, 'dd/MM/yyyy HH:mm')} + ' - ' + ${#temporals.format(order.endTime, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${order.brandCar} + ' ' + ${order.numberCar}"></td>
+                    <td th:text="${order.username}"></td>
+                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <td th:text="${order.costCarWash} + ' руб'"></td>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex p-2 justify-content-center">
+            <a href="/carwash/create">
+                <button class="btn btn-lm btn-primary btn-block" type="submit">Записаться</button>
+            </a>
+        </div>
+
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="d-flex p-2 justify-content-center">
+                <a href="/admin">
+                    <button class="btn btn-lm btn-primary btn-block" type="submit">Изменения списка услуг для
+                        пользователей
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

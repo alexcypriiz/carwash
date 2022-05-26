@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Entity
 @Table(name = "wash_option")
@@ -22,6 +23,10 @@ public class WashOption {
 
     @NotNull(message = "Укажите затрачиваемое время в минутах")
     private Integer time;
+
+    @Transient
+    @ManyToMany(mappedBy = "wash_options")
+    private Set<OrderEntity> orders;
 
     public WashOption() {
     }

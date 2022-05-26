@@ -15,7 +15,12 @@ import ru.aisa.carwash.service.OrderEntityService;
 import ru.aisa.carwash.service.WashOptionService;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/carwash")
@@ -33,8 +38,21 @@ public class MainController {
     }
 
     @GetMapping()
-    public String findAll(Model model) {
-        List<OrderEntity> orders = orderEntityService.findAll();
+    public String findAll(@AuthenticationPrincipal Client client, Model model) throws ParseException {
+        List<OrderEntity> orders = orderEntityService.findAllOrderByStartTime();
+
+        String watchOrder = orders.stream()
+                .filter(x -> x.getUsername().equals(client.getUsername()))
+                .map(x -> x.getUsername())
+                .limit(1)
+                .collect(Collectors.joining());
+        if (watchOrder != "") {
+            LocalDateTime startTime = orderEntityService.findDistinctStartTimeByUsername(watchOrder);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String end = startTime.format(formatter);
+            model.addAttribute("endDate", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(end));
+        }
+
         model.addAttribute("orders", orders);
         return "main/view-orders-car-wash";
     }
@@ -50,17 +68,19 @@ public class MainController {
     @PostMapping("/create")
     public String addOrder(@ModelAttribute("order") @Valid OrderEntity orderEntity, @AuthenticationPrincipal Client client, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("doubleOrderError", "Убедитесь в меню забронированных мест, что время начало времени и конца не входят в интервал чужого времени." +
+            model.addAttribute("doubleOrderError", "Убедитесь в меню забронированных мест," +
+                    " что время начало времени и конца не входят в интервал чужого времени." +
                     "В меню забронированных мест можно перейти с помощью нажатия кнопки в верхнем правом углу");
             return "main/create-orders-car-wash";
         }
         if (!orderEntityService.saveOrder(orderEntity, client)) {
-            model.addAttribute("orderError", "Данный интервал времени занят. Убедитесь, что Ваше время не попадает в занятый интервал времени.");
+            model.addAttribute("orderError", "Данный интервал времени занят. Убедитесь," +
+                    " что Ваше время не попадает в занятый интервал времени.");
             return "main/create-orders-car-wash";
         }
 
         return "redirect:/carwash";
-}
+    }
 
 
 }

@@ -6,17 +6,41 @@
     <title>Забронированные места</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
 </head>
 
 <body>
-
+<!--кнопка выхода из учетки-->
 <div class="d-flex p-2 justify-content-end">
     <a href="/logout">
         <button class="btn btn-sm btn-primary btn-block" type="submit">Выйти из учетной записи</button>
     </a>
 </div>
+<!--        часы-->
+<a th:if="${endDate}">
+    <div class="d-flex justify-content-center">
+        <div class="countdown">
+            <p class="timer">
+            <h4>
+                <span>До начала Вашей очереди</span>
+            </h4>
+            <h3>
+                <span>Дней:</span>
+                <b><span id="days"></span></b>
+                <span>Времени:</span>
+                <b><span id="hours"></span>
+                    <span>:</span>
+                    <span id="minutes"></span>
+                    <span>:</span>
+                    <span id="seconds"></span></b>
+            </h3>
+            </p>
+        </div>
+    </div>
+</a>
 <br>
 <br>
+<!--таблица -->
 <div class="container">
     <div th:switch="${orders}">
 
@@ -45,12 +69,13 @@
                 </tbody>
             </table>
         </div>
+        <!--        кнопка записи-->
         <div class="d-flex p-2 justify-content-center">
             <a href="/carwash/create">
                 <button class="btn btn-lm btn-primary btn-block" type="submit">Записаться</button>
             </a>
         </div>
-
+        <!--        кнопка редактор услуг, только для админа-->
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <div class="d-flex p-2 justify-content-center">
                 <a href="/admin">
@@ -62,6 +87,54 @@
         </div>
     </div>
 </div>
+<!--логика бегущих часов-->
+<script th:inline="javascript">
 
+    function countdown(dateEnd) {
+        let timer, days, hours, minutes, seconds;
+
+        dateEnd = new Date(dateEnd);
+        dateEnd = dateEnd.getTime();
+
+        if (isNaN(dateEnd)) {
+            return;
+        }
+
+        timer = setInterval(calculate, 1000);
+
+        function calculate() {
+            let dateStart = new Date();
+            dateStart = new Date(dateStart.getFullYear(),
+                dateStart.getMonth(),
+                dateStart.getDate(),
+                dateStart.getHours(),
+                dateStart.getMinutes(),
+                dateStart.getSeconds());
+            let timeRemaining = parseInt((dateEnd - dateStart.getTime()) / 1000);
+
+            if (timeRemaining >= 0) {
+                days = parseInt(timeRemaining / 86400);
+                timeRemaining = (timeRemaining % 86400);
+                hours = parseInt(timeRemaining / 3600);
+                timeRemaining = (timeRemaining % 3600);
+                minutes = parseInt(timeRemaining / 60);
+                timeRemaining = (timeRemaining % 60);
+                seconds = parseInt(timeRemaining);
+
+                document.getElementById("days").innerHTML = parseInt(days, 10);
+                document.getElementById("hours").innerHTML = ("0" + hours).slice(-2);
+                document.getElementById("minutes").innerHTML = ("0" + minutes).slice(-2);
+                document.getElementById("seconds").innerHTML = ("0" + seconds).slice(-2);
+            } else {
+                return;
+            }
+        }
+
+        function display(days, hours, minutes, seconds) {
+        }
+    }
+
+    countdown([[${endDate}]]);
+</script>
 </body>
 </html>

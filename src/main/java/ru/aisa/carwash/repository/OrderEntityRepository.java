@@ -8,9 +8,13 @@ import ru.aisa.carwash.model.OrderEntity;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
-public interface OrderEntityRepository extends JpaRepository<OrderEntity,Long> {
+public interface OrderEntityRepository extends JpaRepository<OrderEntity, Long> {
+    @Query(value = "SELECT * FROM order_entity ORDER BY start_time", nativeQuery = true)
+    List<OrderEntity> findAllOrderByStartTime();
+
     @Query("SELECT username FROM OrderEntity WHERE startTime < ?1 AND endTime > ?1 " +
             "OR endTime > ?2 AND startTime <?2 " +
             "OR startTime = ?1 AND endTime = ?2")
@@ -31,4 +35,7 @@ public interface OrderEntityRepository extends JpaRepository<OrderEntity,Long> {
             " VALUES (?1, ?2)", nativeQuery = true)
     void bindOrderAndWashOption(Long idOrder, Long idWashOption);
 
+    @Query(value = "SELECT start_time FROM order_entity WHERE username = ?1 AND now() < start_time " +
+            "ORDER BY start_time LIMIT 1", nativeQuery = true)
+    LocalDateTime findDistinctStartTimeByUsername(String username);
 }

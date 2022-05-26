@@ -18,11 +18,11 @@ public class OrderEntityService {
         this.orderEntityRepository = orderEntityRepository;
     }
 
-    public List<OrderEntity> findAll() {
-        return orderEntityRepository.findAll();
+    public List<OrderEntity> findAllOrderByStartTime() {
+        return orderEntityRepository.findAllOrderByStartTime();
     }
 
-    public boolean saveOrder(OrderEntity orderEntity,Client client) {
+    public boolean saveOrder(OrderEntity orderEntity, Client client) {
 //        нахождение конца интервала времени
         LocalDateTime endTime = orderEntity.getStartTime().plusMinutes(orderEntity.getWashOptions().stream().mapToInt(x -> x.getTime()).sum());
 
@@ -45,5 +45,9 @@ public class OrderEntityService {
         orderEntity.getWashOptions().stream().forEach(x -> orderEntityRepository.bindOrderAndWashOption(idOrder, x.getId()));
 
         return true;
+    }
+
+    public LocalDateTime findDistinctStartTimeByUsername(String usernameOrder) {
+        return orderEntityRepository.findDistinctStartTimeByUsername(usernameOrder);
     }
 }

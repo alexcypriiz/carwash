@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/carwash")
@@ -44,15 +43,16 @@ public class MainController {
         String watchOrder = orders.stream()
                 .filter(x -> x.getUsername().equals(client.getUsername()))
                 .map(x -> x.getUsername())
-                .limit(1)
-                .collect(Collectors.joining());
-        if (watchOrder != "") {
+                .findFirst()
+                .orElse(null);
+        if (watchOrder != null) {
             LocalDateTime startTime = orderEntityService.findDistinctStartTimeByUsername(watchOrder);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            String end = startTime.format(formatter);
-            model.addAttribute("endDate", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(end));
+            if (startTime != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String end = startTime.format(formatter);
+                model.addAttribute("endDate", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(end));
+            }
         }
-
         model.addAttribute("orders", orders);
         return "main/view-orders-car-wash";
     }

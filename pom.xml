@@ -83,6 +83,14 @@
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
 
+<!--        Swagger-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
+
         <!--		Test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -99,6 +107,27 @@
 
     <build>
         <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.openapitools</groupId>-->
+<!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--                &lt;!&ndash; RELEASE_VERSION &ndash;&gt;-->
+<!--                <version>6.0.0</version>-->
+<!--                &lt;!&ndash; /RELEASE_VERSION &ndash;&gt;-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>-->
+<!--                            <generatorName>java</generatorName>-->
+<!--                            <configOptions>-->
+<!--                                <sourceFolder>src/gen/java/main</sourceFolder>-->
+<!--                            </configOptions>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -112,6 +141,8 @@
                 </configuration>
             </plugin>
         </plugins>
+
+
     </build>
 
 </project>

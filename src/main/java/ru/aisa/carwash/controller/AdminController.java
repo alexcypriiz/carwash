@@ -1,5 +1,7 @@
 package ru.aisa.carwash.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@Api(description = "Операции связанные с услугами для клиентов. *Доступ только с индификатором ADMIN_ROLE")
 @RequestMapping("/admin")
 public class AdminController {
     final
@@ -20,7 +23,7 @@ public class AdminController {
         this.washOptionService = washOptionService;
     }
 
-
+    @ApiOperation("Получение списка всех услуг")
     @GetMapping()
     public String findAll(Model model) {
         List<WashOption> washOptions = washOptionService.findAll();
@@ -28,12 +31,14 @@ public class AdminController {
         return "admin/view-wash-option";
     }
 
+    @ApiOperation("Получение формы создания услуги")
     @GetMapping("/create")
     public String createWashOptionForm(Model model) {
         model.addAttribute("washOption", new WashOption());
         return "admin/create-wash-option";
     }
 
+    @ApiOperation("Запись созданной новой услуги")
     @PostMapping("/create")
     public String addWashOption(@ModelAttribute("washOption") @Valid WashOption washOption, BindingResult bindingResult, Model model) {
 
@@ -48,6 +53,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+    @ApiOperation("Получение формы редактирования имеющейся услуги. Принимает id услуги.")
     @GetMapping("/update/{id}")
     public String updateWashOptionForm(@PathVariable("id") Long id, Model model) {
         WashOption washOption = washOptionService.findId(id);
@@ -55,6 +61,7 @@ public class AdminController {
         return "admin/update-wash-option";
     }
 
+    @ApiOperation("Запись отредактированой услуги")
     @PostMapping("/update")
     public String updateWashOption(@ModelAttribute("washOption") @Valid WashOption washOption, BindingResult bindingResult) {
 
@@ -65,6 +72,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+    @ApiOperation("Удаление услуги. Принимает id услуги.")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id) {
         washOptionService.delete(id);

@@ -1,5 +1,7 @@
 package ru.aisa.carwash.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +14,7 @@ import ru.aisa.carwash.service.ClientService;
 import javax.validation.Valid;
 
 @Controller
+@Api(description = "Операции для регистрации новых пользователей.")
 public class RegistrationController {
 
     private final ClientService clientService;
@@ -20,12 +23,14 @@ public class RegistrationController {
         this.clientService = clientService;
     }
 
+    @ApiOperation("Получение формы для создания нового пользователя")
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("clientForm", new Client());
         return "registration";
     }
 
+    @ApiOperation("Запись созданного нового пользователя")
     @PostMapping("/registration")
     public String addUser(@ModelAttribute("clientForm") @Valid Client clientForm, BindingResult bindingResult, Model model) {
 

@@ -1,5 +1,6 @@
 package ru.aisa.carwash.model;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -11,10 +12,15 @@ import java.util.Set;
 @Data
 public class Role implements GrantedAuthority {
     @Id
+    @ApiModelProperty("Уникальный id роли")
     private Long id;
+
+    @ApiModelProperty("Название роли")
     private String name;
+
     @Transient
     @ManyToMany(mappedBy = "roles")
+    @ApiModelProperty("Список клиентов")
     private Set<Client> users;
 
     public Role() {

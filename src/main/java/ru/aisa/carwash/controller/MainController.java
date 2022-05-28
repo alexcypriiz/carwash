@@ -1,5 +1,7 @@
 package ru.aisa.carwash.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
+@Api(description = "Операции связанные с записью клиентов в очередь. *Доступ только зарегистрированным пользователям")
 @RequestMapping("/carwash")
 public class MainController {
 
@@ -36,6 +39,7 @@ public class MainController {
         this.washOptionService = washOptionService;
     }
 
+    @ApiOperation("Получение списка всех записанных клиентов и их забронированного времени с учетом оставшего времени(если пользователь ожидает своей очереди)")
     @GetMapping()
     public String findAll(@AuthenticationPrincipal Client client, Model model) throws ParseException {
         List<OrderEntity> orders = orderEntityService.findAllOrderByStartTime();
@@ -57,6 +61,7 @@ public class MainController {
         return "main/view-orders-car-wash";
     }
 
+    @ApiOperation("Получение формы для записи в очередь")
     @GetMapping("/create")
     public String addOrderForm(Model model) {
         List<WashOption> selectedWashOptions = washOptionService.findAll();
@@ -65,6 +70,7 @@ public class MainController {
         return "main/create-orders-car-wash";
     }
 
+    @ApiOperation("Запись статистики в список очереди на мойку")
     @PostMapping("/create")
     public String addOrder(@ModelAttribute("order") @Valid OrderEntity orderEntity, @AuthenticationPrincipal Client client, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {

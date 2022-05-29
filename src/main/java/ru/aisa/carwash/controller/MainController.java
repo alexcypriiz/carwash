@@ -79,9 +79,15 @@ public class MainController {
                     "В меню забронированных мест можно перейти с помощью нажатия кнопки в верхнем правом углу");
             return "main/create-orders-car-wash";
         }
-        if (!orderEntityService.saveOrder(orderEntity, client)) {
-            model.addAttribute("orderError", "Данный интервал времени занят. Убедитесь," +
-                    " что Ваше время не попадает в занятый интервал времени.");
+        try {
+            if (!orderEntityService.saveOrder(orderEntity, client)) {
+                model.addAttribute("orderError", "Данный интервал времени занят. Убедитесь," +
+                        " что Ваше время не попадает в занятый интервал времени.");
+                return "main/create-orders-car-wash";
+            }
+        } catch (Exception e) {
+            model.addAttribute("orderError", "Без выбранных услуг нельзя записать. " +
+                    "Пожалуйста, выберите услугу из списка ниже.");
             return "main/create-orders-car-wash";
         }
 

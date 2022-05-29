@@ -1,6 +1,6 @@
 ## CarWash
 
-###Описание
+### Описание
 Данное приложение реализует веб сервис для автомойки.
 
 В него входят:
@@ -16,7 +16,7 @@
 - добавление/редактирование/удаление представленных услуг клиентам.
 
 ***
-###Запуск
+### Запуск
 Для запуска приложения Вам потребуются инструменты:
 - jdk 17 (64-Bit),
 - maven 3.6.3 и выше,
@@ -32,7 +32,7 @@
 **Примечание** - Созданная база данных должна быть пустой.
 - ```{USERNAME}``` - имя пользователя.
 - ```{PASSWORD}``` - пароль.
--
+
 Рабочий пример:
 ```sudo mvn spring-boot:run -Dspring-boot.run.arguments="--spring.datasource.url=jdbc:postgresql://localhost:5432/carwash --spring.datasource.username=postgre --spring.datasource.password=postgre"```
 

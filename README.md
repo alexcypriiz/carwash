@@ -20,25 +20,22 @@
 Для запуска приложения Вам потребуются инструменты:
 - jdk 17 (64-Bit),
 - maven 3.6.3 и выше,
-- PostgreSQL 10 и выше.
+- docker version 20.10.16 и выше,
+- docker-compose version 1.29.2 и выше.
 
-Запуск осуществляется из корня папки проекта с помощью командной строки(Для пользователей windows возможно использовать утилиту "Git Bash").
+Запуск осуществляется из корня проекта с помощью командной строки (Для пользователей windows возможно использовать утилиту "Git Bash").
 
-Выполнить команду:
-```sudo mvn spring-boot:run -Dspring-boot.run.arguments="--spring.datasource.url={URL} --spring.datasource.username={USERNAME} --spring.datasource.password={PASSWORD}"```
-, где
-- ```{URL}``` - ссылка на Вашу созданную базу данных в PostgreSQL, которая выполняется локально на Вашем компьютере. По умолчанию PostgreSQL работает на порту 5432, хотя его можно изменить, если вы этого желаете.
+Выполнить команды:
 
-**Примечание** - Созданная база данных должна быть пустой.
-- ```{USERNAME}``` - имя пользователя.
-- ```{PASSWORD}``` - пароль.
+```mvn package``` - сборка проекта в jar файл,
 
-Рабочий пример:
-```sudo mvn spring-boot:run -Dspring-boot.run.arguments="--spring.datasource.url=jdbc:postgresql://localhost:5432/carwash --spring.datasource.username=postgre --spring.datasource.password=postgre"```
+```docker-compose build``` - сборка решения,
+
+```docker-compose up``` - запуск решения.
 
 ***
 ### Ссылки
-После успешного запуска проекта можно перейти по ссылкам:
+После успешного запуска решения можно перейти по ссылкам:
 * http://127.0.0.1:8080/login - начало работы с приложением
 
 * http://127.0.0.1:8080/swagger-ui/ - документация Swagger

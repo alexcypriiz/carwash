@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:14.3
+    container_name: postgre
+    restart: always
+    environment:
+      POSTGRES_DB: "carwash"
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "postgresql"
+    ports:
+      - "5432:5432"
+  app:
+    build: .
+    container_name: carwash-web-app
+    ports:
+      - "8080:8080"
+    environment:
+      URL: "jdbc:postgresql://db:5432/carwash"
+      USERNAME: "admin"
+      PASSWORD: "postgresql"
+    depends_on:
+      - db

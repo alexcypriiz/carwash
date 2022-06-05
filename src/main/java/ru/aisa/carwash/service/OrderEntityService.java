@@ -5,6 +5,7 @@ import ru.aisa.carwash.model.Client;
 import ru.aisa.carwash.model.OrderEntity;
 import ru.aisa.carwash.repository.OrderEntityRepository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -23,6 +24,7 @@ public class OrderEntityService {
         return orderEntityRepository.findAllOrderByStartTime();
     }
 
+    @Transactional
     public boolean saveOrder(OrderEntity orderEntity, Client client) {
         //    Затрачиваемое время с учетом всех услг
         LocalDateTime startTime;

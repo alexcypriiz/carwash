@@ -6,6 +6,7 @@ import ru.aisa.carwash.model.OrderEntity;
 import ru.aisa.carwash.repository.OrderEntityRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -68,7 +69,26 @@ public class OrderEntityService {
         return true;
     }
 
+    public String countDown(List<OrderEntity> orders, Client client) {
+        String watchOrder = orders.stream()
+                .filter(x -> x.getUsername().equals(client.getUsername()))
+                .map(x -> x.getUsername())
+                .findFirst()
+                .orElse(null);
+
+        if (watchOrder != null) {
+            LocalDateTime startTime = findDistinctStartTimeByUsername(watchOrder);
+            if (startTime != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String end = startTime.format(formatter);
+                return end;
+            }
+        }
+        return null;
+    }
+
     public LocalDateTime findDistinctStartTimeByUsername(String usernameOrder) {
         return orderEntityRepository.findDistinctStartTimeByUsername(usernameOrder);
     }
 }
+

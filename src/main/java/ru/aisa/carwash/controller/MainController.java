@@ -19,8 +19,6 @@ import ru.aisa.carwash.service.WashOptionService;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -44,18 +42,9 @@ public class MainController {
     public String findAll(@AuthenticationPrincipal Client client, Model model) throws ParseException {
         List<OrderEntity> orders = orderEntityService.findAllOrderByStartTime();
 
-        String watchOrder = orders.stream()
-                .filter(x -> x.getUsername().equals(client.getUsername()))
-                .map(x -> x.getUsername())
-                .findFirst()
-                .orElse(null);
-        if (watchOrder != null) {
-            LocalDateTime startTime = orderEntityService.findDistinctStartTimeByUsername(watchOrder);
-            if (startTime != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-                String end = startTime.format(formatter);
-                model.addAttribute("endDate", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(end));
-            }
+        String countDown = orderEntityService.countDown(orders, client);
+        if (countDown != null) {
+            model.addAttribute("endDate", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(countDown));
         }
         model.addAttribute("orders", orders);
         return "main/view-orders-car-wash";
@@ -96,3 +85,4 @@ public class MainController {
 
 
 }
+

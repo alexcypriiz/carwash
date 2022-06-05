@@ -13,13 +13,21 @@ import ru.aisa.carwash.service.ClientService;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Autowired
+
+    final
+    EncoderConfig encoderConfig;
+    final
     ClientService clientService;
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    public WebSecurityConfiguration(ClientService clientService, EncoderConfig encoderConfig) {
+        this.clientService = clientService;
+        this.encoderConfig = encoderConfig;
     }
+
+//    @Bean
+//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -66,7 +74,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(clientService).passwordEncoder(bCryptPasswordEncoder());
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(clientService).passwordEncoder(encoderConfig.bCryptPasswordEncoder());
     }
 }
